@@ -320,7 +320,7 @@ export default function App() {
   };
 
   const handleAnswer = (index, correct) => {
-    if (selectedAnswer !== null) return; // Prevent multiple clicks
+    if (selectedAnswer !== null) return; 
     setSelectedAnswer(index);
     setIsCorrect(correct);
     if (correct) {
@@ -341,66 +341,73 @@ export default function App() {
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 font-sans text-slate-800">
       
-      {/* START SCREEN */}
+      {/* TELA INICIAL */}
       {gameState === 'start' && (
-        <div className="bg-white rounded-3xl shadow-xl p-8 max-w-lg w-full text-center border-t-8 border-purple-500">
-          <Globe2 className="w-20 h-20 text-purple-500 mx-auto mb-6" />
-          <h1 className="text-3xl font-bold mb-4 text-slate-800">Quiz de Arte e História</h1>
-          <p className="text-slate-600 mb-8 text-lg">
+        <div className="bg-white rounded-[2rem] shadow-lg p-10 max-w-md w-full text-center">
+          <Globe2 className="w-20 h-20 text-blue-500 mx-auto mb-6" />
+          <h1 className="text-3xl font-extrabold mb-4 text-slate-800 tracking-tight">Quiz de Arte e História</h1>
+          <p className="text-slate-500 mb-8 text-lg">
             Teste seus conhecimentos sobre Música Moderna no Brasil, Vanguardas Europeias e Abstracionismo!
           </p>
           <button 
             onClick={handleStart}
-            className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-transform active:scale-95 text-lg"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-transform active:scale-95 text-lg"
           >
-            <Play fill="currentColor" />
+            <Play fill="currentColor" className="w-5 h-5" />
             Começar Quiz!
           </button>
         </div>
       )}
 
-      {/* PLAYING SCREEN */}
+      {/* TELA JOGANDO */}
       {gameState === 'playing' && (
-        <div className="bg-white rounded-3xl shadow-xl w-full max-w-2xl overflow-hidden flex flex-col h-[90vh] sm:h-auto">
-          {/* Header */}
-          <div className="bg-purple-600 text-white p-4 sm:p-6 flex justify-between items-center">
+        <div className="bg-white rounded-3xl shadow-lg w-full max-w-2xl overflow-hidden flex flex-col h-[90vh] sm:h-auto">
+          
+          {/* Header Azul Arredondado */}
+          <div className="bg-blue-600 text-white px-6 py-5 flex justify-between items-center rounded-t-3xl">
             <div className="flex items-center gap-2 font-semibold">
               <Map className="w-5 h-5" />
               Questão {currentQuestion + 1} de {questions.length}
             </div>
-            <div className="font-bold bg-white/20 px-4 py-1 rounded-full">
+            <div className="bg-blue-500 px-4 py-1 rounded-full font-bold text-sm">
               Acertos: {score}
             </div>
           </div>
 
-          {/* Progress Bar */}
-          <div className="w-full bg-slate-200 h-2">
+          {/* Barra de Progresso Verde */}
+          <div className="w-full bg-slate-100 h-2">
             <div 
               className="bg-green-400 h-2 transition-all duration-500 ease-in-out"
               style={{ width: `${((currentQuestion) / questions.length) * 100}%` }}
             ></div>
           </div>
 
-          {/* Question */}
-          <div className="p-6 sm:p-8 flex-1 overflow-y-auto">
+          {/* Corpo da Questão */}
+          <div className="p-6 sm:p-8 flex-1 overflow-y-auto bg-white">
             <h2 className="text-xl sm:text-2xl font-bold mb-8 text-slate-800 leading-snug">
               {questions[currentQuestion].question}
             </h2>
 
-            {/* Options */}
-            <div className="space-y-4">
+            {/* Opções */}
+            <div className="space-y-4 mb-6">
               {questions[currentQuestion].options.map((option, index) => {
-                let buttonStyle = "border-2 border-slate-200 hover:border-purple-400 hover:bg-purple-50 text-slate-700";
+                let buttonStyle = "w-full text-left p-4 rounded-xl font-medium text-base sm:text-lg transition-all flex justify-between items-center border ";
                 
-                if (selectedAnswer !== null) {
+                if (selectedAnswer === null) {
+                  // Estado normal antes de clicar (Sem borda visível, texto cinza)
+                  buttonStyle += "border-transparent text-slate-500 hover:bg-slate-50";
+                } else {
+                  // Estado após clicar
                   if (index === selectedAnswer) {
-                    buttonStyle = option.isCorrect 
-                      ? "border-green-500 bg-green-100 text-green-800" 
-                      : "border-red-500 bg-red-100 text-red-800";
+                    if (option.isCorrect) {
+                      buttonStyle += "bg-green-100 border-green-300 text-green-800"; 
+                    } else {
+                      buttonStyle += "bg-red-100 border-red-300 text-red-800"; 
+                    }
                   } else if (option.isCorrect) {
-                    buttonStyle = "border-green-500 bg-green-100 text-green-800"; 
+                    buttonStyle += "bg-green-100 border-green-300 text-green-800"; 
                   } else {
-                    buttonStyle = "border-slate-200 opacity-50";
+                    buttonStyle += "border-transparent text-slate-400 opacity-50"; 
                   }
                 }
 
@@ -409,7 +416,7 @@ export default function App() {
                     key={index}
                     onClick={() => handleAnswer(index, option.isCorrect)}
                     disabled={selectedAnswer !== null}
-                    className={`w-full text-left p-4 rounded-xl font-medium text-base sm:text-lg transition-all flex justify-between items-center ${buttonStyle}`}
+                    className={buttonStyle}
                   >
                     <span>{option.text}</span>
                     {selectedAnswer !== null && option.isCorrect && <CheckCircle2 className="text-green-600 min-w-6" />}
@@ -419,56 +426,45 @@ export default function App() {
               })}
             </div>
 
-            {/* Justification Box (Aparece após responder) */}
+            {/* Caixa de Justificativa */}
             {selectedAnswer !== null && (
-              <div className="mt-6 p-5 bg-purple-50 border border-purple-200 rounded-xl text-slate-700 animate-in fade-in">
-                <p className="font-bold text-purple-800 mb-2 flex items-center gap-2">
-                  Justificativa
-                </p>
-                <p className="leading-relaxed">
-                  {questions[currentQuestion].justification}
-                </p>
+              <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl text-slate-600 animate-in fade-in">
+                <p className="font-bold text-slate-800 mb-1">📝 Justificativa</p>
+                <p>{questions[currentQuestion].justification}</p>
               </div>
             )}
-          </div>
 
-          {/* Footer (Next Button) */}
-          {selectedAnswer !== null && (
-            <div className="p-6 border-t border-slate-100 bg-slate-50 animate-in slide-in-from-bottom-4">
+            {/* Botão Próxima Questão */}
+            {selectedAnswer !== null && (
               <button
                 onClick={handleNext}
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-transform active:scale-95 text-lg shadow-md hover:shadow-lg"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl mt-6 flex items-center justify-center gap-2 transition-transform active:scale-95 text-lg"
               >
                 {currentQuestion < questions.length - 1 ? 'Próxima Questão' : 'Ver Resultado'}
-                <ArrowRight />
+                <ArrowRight className="w-5 h-5" />
               </button>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       )}
 
-      {/* END SCREEN */}
+      {/* TELA FINAL (RESULTADOS) */}
       {gameState === 'end' && (
-        <div className="bg-white rounded-3xl shadow-xl p-8 max-w-lg w-full text-center border-t-8 border-green-500">
-          <Award className="w-24 h-24 text-green-500 mx-auto mb-4" />
-          <h1 className="text-4xl font-bold mb-2 text-slate-800">Fim de Jogo!</h1>
-          <p className="text-slate-600 text-lg mb-8">Você completou o quiz de Arte e História.</p>
+        <div className="bg-white rounded-[2rem] shadow-lg p-10 max-w-md w-full text-center">
+          <Award className="w-20 h-20 text-blue-500 mx-auto mb-4" />
+          <h1 className="text-3xl font-extrabold mb-2 text-slate-800">Fim de Jogo!</h1>
+          <p className="text-slate-500 mb-8">Aqui está o seu desempenho final.</p>
           
-          <div className="bg-slate-100 rounded-2xl p-6 mb-8 shadow-inner">
-            <p className="text-slate-500 font-medium mb-1">Sua Pontuação</p>
-            <p className="text-5xl font-black text-purple-600">
-              {score} <span className="text-2xl text-slate-400">/ {questions.length}</span>
-            </p>
-            <p className="mt-4 text-slate-600 font-medium">
-              {score >= 25 ? '🤩 Excelente! Você domina a matéria!' : 
-               score >= 15 ? '🙂 Muito bem! Belo desempenho.' : 
-               '📚 Bom esforço! Vale a pena revisar o livro e tentar de novo.'}
+          <div className="bg-slate-50 rounded-2xl p-6 mb-8 border border-slate-100">
+            <p className="text-slate-500 font-medium mb-2">Total de Acertos</p>
+            <p className="text-6xl font-black text-blue-600">
+              {score} <span className="text-2xl text-slate-400 font-medium">/ {questions.length}</span>
             </p>
           </div>
 
           <button 
             onClick={handleStart}
-            className="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-transform active:scale-95 text-lg"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-transform active:scale-95 text-lg"
           >
             <RotateCcw className="w-5 h-5" />
             Jogar Novamente
