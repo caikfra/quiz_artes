@@ -345,7 +345,7 @@ export default function App() {
       {gameState === 'start' && (
         <div className="bg-white rounded-[2rem] shadow-lg p-10 max-w-md w-full text-center">
           <Globe2 className="w-20 h-20 text-blue-500 mx-auto mb-6" />
-          <h1 className="text-3xl font-extrabold mb-4 text-slate-800 tracking-tight">Quiz de Arte e História</h1>
+          <h1 className="text-3xl font-extrabold mb-4 text-slate-800 tracking-tight">Quiz de Artes</h1>
           <p className="text-slate-500 mb-8 text-lg">
             Teste seus conhecimentos sobre Música Moderna no Brasil, Vanguardas Europeias e Abstracionismo!
           </p>
